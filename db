@@ -1,0 +1,61 @@
+drop table User;
+-- Create User Table
+CREATE TABLE User (
+    UserID INT PRIMARY_KEY AUTO_INCREMENT,
+    Username VARCHAR(50) NOT NULL,
+    Email VARCHAR(100) NOT NULL UNIQUE,
+    PasswordHash VARCHAR(100) NOT NULL,
+    ProfilePictureURL VARCHAR(255),
+    RegistrationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create Category Table
+CREATE TABLE Category (
+    CategoryID INT PRIMARY_KEY AUTO_INCREMENT,
+    CategoryName VARCHAR(50) NOT NULL
+);
+
+-- Create Quiz Table
+CREATE TABLE Quiz (
+    QuizID INT PRIMARY_KEY AUTO_INCREMENT,
+    UserID INT,
+    CategoryID INT,
+    Difficulty VARCHAR(20),
+    TimeLimit INT,
+    StartTime TIMESTAMP,
+    EndTime TIMESTAMP,
+    Score INT,
+    FOREIGN KEY (UserID) REFERENCES User(UserID),
+    FOREIGN KEY (CategoryID) REFERENCES Category(CategoryID)
+);
+
+-- Create Question Table
+CREATE TABLE Question (
+    QuestionID INT PRIMARY_KEY AUTO_INCREMENT,
+    CategoryID INT,
+    QuestionText TEXT NOT NULL,
+    CorrectAnswer VARCHAR(255) NOT NULL,
+    IncorrectAnswers TEXT,
+    FOREIGN KEY (CategoryID) REFERENCES Category(CategoryID)
+);
+
+-- Create UserQuizResult Table
+CREATE TABLE UserQuizResult (
+    ResultID INT PRIMARY_KEY AUTO_INCREMENT,
+    UserID INT,
+    QuizID INT,
+    Score INT,
+    AttemptDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (UserID) REFERENCES User(UserID),
+    FOREIGN KEY (QuizID) REFERENCES Quiz(QuizID)
+);
+
+-- Create UserLeaderboard Table
+CREATE TABLE UserLeaderboard (
+    LeaderboardID INT PRIMARY_KEY AUTO_INCREMENT,
+    UserID INT,
+    Score INT,
+    Rank INT,
+    EntryDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (UserID) REFERENCES User(UserID)
+);
